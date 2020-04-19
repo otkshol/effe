@@ -1,0 +1,69 @@
+# 不必要なオブジェクトの生成を避ける
+
+機能的に同じオブジェクトを使用するなら、必要なたびにインスタンスを生成するよりオブジェクトを再利用したほうが良い。
+オブジェクトが不変（immutable）であれば再利用可能
+
+極端に悪い例
+```String s = new String("bikini");```
+上記の書き方だと、実行されるごとに新しくStringインスタンスが生成される。
+---
+
+```String s = "bikini":```
+上記の書き方だと、オブジェクトを使い回すことができる。
+さらに同じ文字列リテラルを持っていると、再利用されることが保証されている。
+---
+
+コンストラクタではなくstaticファクトリメソッドを使うことで、**呼び出し先のメソッドでインスタンス生成がされていなければ（たいていの場合そうなっているはず）**不必要なオブジェクト生成を避けることができる。
+可変オブジェクトも同様に再利用可能。
+
+---
+オブジェクト生成にコストがかかるものは再利用するべき。
+例: Patternインスタンスの生成（状態遷移を表すオートマトンをコンパイルする必要があるのでコスト高い）
+対策
+- Patternインスタンスをキャッシュして、インスタンスを使い捨てにせずに再利用する
+```
+public class RomanNumerails {
+    // ここでPatternインスタンスをキャッシュして再利用できるようにしている
+    private static final Pattern ROMAN = Pattern.compile(
+            "^(?=.)M*(C[MD]|D?C{0,3})"
+            + "(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$");
+
+    static boolean isRomanNumeral(String s) {
+        // matcher(s)はPatternクラスのインスタンスメソッドで、matches()はMatcherクラスのインスタンスメソッド
+        return ROMAN.matcher(s).matches();
+    }
+}
+```
+
+- 上記のメリット
+    - パフォーマンスが良くなる
+        - 著者再現によると処理速度は6.5倍
+    - 可読性が上がる
+        - 正規表現パターンに`ROMAN`と名称をつけたので何の正規表現かわかりやすい
+
+---
+
+遅延初期化はするなと注意している。たしかにほんの少し処理は早くなるが、ボトルネックになる部分ではなくそれよりもEffective Javaにある優れた実装をすることで処理スピードもついてくると著者は述べている
+
+---
+
+オブジェクトが不変なら、安全に再利用できることは明らか。
+**直感に反する明らかではない状況もある** (4/19ここまで)
+    - *adapter*パターン
+    - MapインターフェースのkeySetメソッド
+
+---
+
+4/20~に続く。
+オートボクシングが勝手に走るのを防ぐ
+
+---
+### 参考
+- PatternのJavadoc 
+https://docs.oracle.com/javase/jp/6/api/java/util/regex/Pattern.html
+- MatcherのJavadoc 
+https://docs.oracle.com/javase/jp/6/api/java/util/regex/Matcher.html
+- 正規表現
+https://murashun.jp/blog/20190215-01.html
+- ローマ数字の数え方
+https://kw-note.com/notation/roman-numerals/
