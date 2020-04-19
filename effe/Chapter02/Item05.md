@@ -32,12 +32,17 @@ public class SpellChecker {
 TODO 任意の依存性グラフの意味、具体例を調べる。
 ---
 
-依存性注入パターンは不変性を保つので、複数クライアントが依存先のオブジェクトを共有できる。
+依存性注入パターンでは不変性が高めるので、（不変性があると同値ではない！）
+複数クライアントが依存先のオブジェクトを共有できる。
 
 ---
 
 有用な変形は、コンストラクタに資源ファクトリを渡すもの。
 境界ワイルドカード型（bounded wildcard type）を用いた`Supplier<T>`メソッドの例（これはFactory Methodパターンを具体化している）
+
+TODO 
+Factory Methodパターンを理解する
+
 ```
 Mosaic create(Supplier<? extends Tile> tileFactory) {...}
 ```
