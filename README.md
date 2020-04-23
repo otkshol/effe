@@ -1,9 +1,9 @@
 # effe
-[Effective Java 第3版]("https://www.amazon.co.jp/Effective-Java-%E7%AC%AC3%E7%89%88-%E3%82%B8%E3%83%A7%E3%82%B7%E3%83%A5%E3%82%A2%E3%83%BB%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF-ebook/dp/B07RHX1K53/ref=sr_1_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&dchild=1&keywords=effective+java&qid=1587604225&sr=8-1")の学習記録
+[Effective Java 第3版](https://www.amazon.co.jp/Effective-Java-%E7%AC%AC3%E7%89%88-%E3%82%B8%E3%83%A7%E3%82%B7%E3%83%A5%E3%82%A2%E3%83%BB%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF-ebook/dp/B07RHX1K53/ref=sr_1_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&dchild=1&keywords=effective+java&qid=1587604225&sr=8-1)の学習記録
 
 Effective Javaの輪読を軸に、不明点や理解不足の基本事項を参考書籍を使って補完する学習方式
 
- 著者Joshua Blochによるサンプルコードは[こちら]("https://github.com/jbloch/effective-java-3e-source-code")
+ 著者Joshua Blochによるサンプルコードは[こちら](https://github.com/jbloch/effective-java-3e-source-code)
 
 ![effe](https://m.media-amazon.com/images/I/5163U1-fsQL.jpg "effe")
 
