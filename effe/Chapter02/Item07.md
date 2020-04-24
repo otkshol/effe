@@ -63,30 +63,48 @@ public class Stack {
 なので、メモリリークの量が少量でも雪だるま式にガベージコレクション対象外のオブジェクトが積み上がって性能劣化につながる可能性がある。
 
 
-TODO 具体的な状況（コード上でどうなっているか）
+具体例: 参照値を持つオブジェクトのメモリリークを考える
 ```
-
+public class Dto {
+    int id;
+    string name;
+}
 ```
-
-
-
+呼び出し元
+```
+Stack stack = new Stack();
+Dto dto1 = new Dto( 1, "hoge");
+// dto2がガベージコレクションの対象外になるということは、"fuga"もガベージコレクションの対象外になる。
+Dto dto2 = new Dto( 2, "fuga");
+stack.push(dto1);
+stack.push(dto2);
+// ここでdto2は使われなくなるが参照値はもったまま
+stack.pop();
+```
 ---
 ### 対策
 一旦、使われなくなった参照には`null`を設定する。
 ```
-TODO　popのコードかく
+public Object pop() {
+    // ガード節
+    if (size == 0)
+        // 例外翻訳をしている。これがなくてもArrayIndexOutOfBoundsExceptionが投げられるがこちらのほうがより親切
+        throw new EmptyStackException;
+    // ここで参照値をいったんtmp変数に格納する
+    Object result = elements[--size];
+    // ここで使用されなくなった参照を取り除く
+    elements[size] = null;
+
+    return result;
+}
 ```
-
-例外翻訳
-
 ガベージコレクションが実行されるのいいつ？
 変数のスコープ
 
-
-
 #### `null`を設定するメリット
 - ガベージコレクションの対象にすることができる。
-- 誤った参照の使われ方をした場合、`NullPointerException`でエラーにできる。（エラーはできるだけ早い段階で拾うのが良いJoshua Blochの思想）
+- 誤った参照の使われ方をした場合、`NullPointerException`でエラーにできる。（エラーはできるだけ早い段階で拾うのが良い `コンパイルエラー > 実行時エラー > 動作バグ `）
+
 
 **しかし**、使用したオブジェクトにnullをすぐに書くべきでもない。**オブジェクト参照にnullを設定するのは例外的であるべき**
 使われなくなった参照を排除する最善の方法は、参照が含まれていた変数をスコープ外にすること。(項目57)
@@ -97,7 +115,6 @@ TODO　popのコードかく
 **一般的にクラスが独自のメモリを管理しているとき**
 フィールド変数かつ仕様として使われない参照にnull
 
-
 例: 上述のStackクラス。
 
 この記憶プール(*storage pool*)は、element配列の要素からなる。
@@ -105,16 +122,39 @@ TODO　popのコードかく
 
 ---
 
+### 参照を切る方法をいったん整理（ガベージコレクトを有効にする方法）
+1. 変数をスコープアウトする
+    - 一般的にこっちをやる。対象は仮引数とローカル変数
+2. 参照値にnullを代入
+    - 対象はフィールド変数。
+    - 参照値にnullを代入する処理には意味があることを伝えるためにコメントをつけたほうが良い（Java標準APIの実装ですらやっている！例:Vector．class）
+    ```
+     elementData[elementCount] = null; /* to let gc do its work */
+    ```
+
+---
 ### 他のよくあるメモリリーク原因2選
 
-- キャッシュ
+- 原因1: 参照をキャッシュに入れたままにしてしまう
     - 解決方法
-        - キャッシュを`WeakHashMap`で表現する
-        - https://docs.oracle.com/javase/jp/8/docs/api/java/util/WeakHashMap.html
+        - キャッシュを`WeakHashMap`で表現する（キャッシュのエントリに対するキーへの参照がキャッシュの外にある場合）
+        - `WeakHashMap`ではエントリが無効になるとガベージコレクトの対象外にすることができなくなって破棄される。よってメモリリークを防ぐことができる[WeakHashMapのJavadoc](https://docs.oracle.com/javase/jp/8/docs/api/java/util/WeakHashMap.html)
+        - 一般的にはキャッシュエントリは時間経過に伴って意味をなさなくなるので適宜除去されるべき。これは[ScheduledThreadPoolExecutor](https://docs.oracle.com/javase/jp/8/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html)で実現するか、キャッシュにエントリを追加するときに副作用として実行することもできる。後者の具体例は、[LinkedHashMapクラスのremoveEldestEntryメソッド](https://docs.oracle.com/javase/jp/8/docs/api/java/util/LinkedHashMap.html#removeEldestEntry-java.util.Map.Entry-)
+        - 高度な(?)キャッシュ[java.lang.ref](https://docs.oracle.com/javase/jp/8/docs/api/java/lang/ref/package-summary.html])を直接使う場合もある
 
 
-- リスナーやコールバック
+- 原因2:リスナーやコールバック
+    - リスナー
+    - コールバック
+    - クライアントがコールバックを登録するが明示的に登録を解除しないAPIを実装するとき、コールバックが蓄積される。（例:グーグルマップAPIで地図見るたびにコールバック登録が蓄積される？）
+    - 解決方法
+        - `WeakHashMap`のキーとしてAPIのコールバックを保存する
 
+---
+
+メモリリークはエラーとしては現れないので発見しにくい...
+コードインスペクションの結果やデバッグツールの**ヒーププロファイラ(*heap profiler*)** を使うと発見できる。
+メモリリークもできるだけ早い段階で検知できることが望ましい。
 
 
 ---
