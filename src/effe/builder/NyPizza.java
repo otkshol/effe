@@ -3,36 +3,37 @@ package effe.builder;
 import java.util.Objects;
 
 public class NyPizza extends Pizza {
-    public enum Size { SMALL, MEDIUM, LARGE}
-    private final Size size;
+	public enum Size {
+		SMALL, MEDIUM, LARGE
+	}
 
-    public static class Builder extends Pizza.Builder<Builder> {
-        private final Size size;
+	private final Size size;
 
-        public Builder(Size size) {
-            this.size = Objects.requireNonNull(size);
-        }
+	public static class Builder extends Pizza.Builder<Builder> {
+		private final Size size;
 
-        @Override public NyPizza build() {
-            return new NyPizza(this);
-        }
+		public Builder(Size size) {
+			this.size = Objects.requireNonNull(size);
+		}
 
-        @Override protected Builder self() {
-            return this;
-        }
-    }
+		// ここでPizzaの子クラスメソッドがPizzaの子クラス型を返すように実装している（共変戻り値片付けと呼ばれている）
+		@Override
+		public NyPizza build() {
+			return new NyPizza(this);
+		}
 
-    private NyPizza(Builder builder) {
-        super(builder);
-        size = builder.size;
-    }
+		@Override
+		protected Builder self() {
+			return this;
+		}
+	}
 
-    public static void main(String[] args) {
-        //  Toppingのenumをstatic importするとTopping.を省略できる
-        NyPizza pizza = new NyPizza.Builder(Size.SMALL)
-                .addTopping(Topping.SAUSAGE).addTopping(Topping.ONION).build();
+	private NyPizza(Builder builder) {
+		super(builder);
+		size = builder.size;
+	}
 
-        System.out.println("size: " + pizza.size);
-        System.out.println("toppings: " + pizza.toppings);
-    }
+	public Size getSize() {
+		return size;
+	}
 }

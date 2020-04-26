@@ -21,6 +21,7 @@ public abstract class Pizza {
     }
 
     Pizza(Builder<?> builder) {
+		// 防御的コピーを行っている
         toppings = builder.toppings.clone();
     }
 }

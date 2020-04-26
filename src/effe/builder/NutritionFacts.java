@@ -57,14 +57,24 @@ public class NutritionFacts {
         carbohydrate = builder.carbohydrate;
     }
 
-    public static void main(String[] args) {
-        NutritionFacts cocaCola = new NutritionFacts.Builder(240, 8)
-                .calories(100).sodium(35).carbohydrate(27).build();
+    // 変数アクセスのためにgetterを追加
+	public int getServingSize() {
+		return servingSize;
+	}
 
-        System.out.println("servingSize: " + cocaCola.servingSize);
-        System.out.println("servings: " + cocaCola.servings);
-        System.out.println("calories: " + cocaCola.calories);
-        System.out.println("sodium: " + cocaCola.sodium);
-        System.out.println("carbohydrate: " + cocaCola.carbohydrate);
-    }
+	public int getServings() {
+		return servings;
+	}
+
+	public int getCalories() {
+		return calories;
+	}
+
+	public int getSodium() {
+		return sodium;
+	}
+
+	public int getCarbohydrate() {
+		return carbohydrate;
+	}
 }
