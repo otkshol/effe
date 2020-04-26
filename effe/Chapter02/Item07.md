@@ -12,7 +12,7 @@ CやC++はメモリ管理を手作業で行う必要があった。。
     - 確保したメモリ領域を解放しないことで、メモリの空き容量が減っていくこと
 ---
 ### サンプルコード(StackはJava標準API)
-(余談:Joshua BlochはJavaを作った人なのでJava標準のクラスを題材にしがち)
+(余談:Joshua BlochはJavaを作った人なのでJava標準のクラスを題材にしがち)[ArraysクラスのcopyOfメソッドのリファレンス](https://docs.oracle.com/javase/jp/8/docs/api/java/util/Arrays.html#copyOf-T:A-int-)
 ```
 public class Stack {
     private Object[] elements;
@@ -46,8 +46,8 @@ public class Stack {
 }
 
 ```
-メモリリークが起きると**ガベージコレクタの活動の増大、メモリ量の増大**によって性能劣化につながる。
-極端に言うと、ディスク（物理メモリからスワップ領域へ）のページング(実記憶装置と補助記憶装置のやり取り)
+[メモリリーク](https://wa3.i-3-i.info/word16066.html)が起きると**ガベージコレクタの活動の増大、メモリ量の増大**によって性能劣化につながる。
+極端に言うと、ディスク（[物理メモリ](https://wa3.i-3-i.info/word1716.html)から[スワップ領域](https://wa3.i-3-i.info/word1721.html)へ）の[ページング](https://wa3.i-3-i.info/word13352.html)([実記憶装置と補助記憶装置のやり取り](https://www.atmarkit.co.jp/ait/articles/0404/02/news079_2.html))
 や`OutOfMemoryError`が発生する（実際は滅多に起きない）
 
 ---
@@ -179,22 +179,6 @@ public Object pop() {
 
 やっぱ違いそう。サイズは`Collection`で使われていて、長さ（length）は`String`や`Array`で使われている。直列、まとまってるイメージのものは長さで、連続性はないがまとまっているものを表すのはサイズという直感的な理解をした。
 
-
---- 
-### 参考
-- ArraysクラスのcopyOfメソッド
-    - https://docs.oracle.com/javase/jp/8/docs/api/java/util/Arrays.html#copyOf-T:A-int-
-- ページング方式のざっくり理解
-    - https://wa3.i-3-i.info/word13352.html
-    - https://www.atmarkit.co.jp/ait/articles/0404/02/news079_2.html
-- 物理メモリ
-    - https://wa3.i-3-i.info/word1716.html
-- スワップ領域
-    - https://wa3.i-3-i.info/word1721.html
-- メモリリークとは
-    - https://wa3.i-3-i.info/word16066.html
-
-
 --- 
 ### 備忘
 - コンピュータサイエンスの本届いたらキャッチアップ
@@ -202,14 +186,3 @@ public Object pop() {
     - データ構造の話(メモリ上でどう実現されるか)
         - 抽象データ型＋データ構造で作られている型がある
         - 例：ArrayList、HashSet
-- 楽観ロック、悲観ロック（）
-https://qiita.com/NagaokaKenichi/items/73040df85b7bd4e9ecfc
-- しくろないずど
-- マルチスレッド
-    - 資源への書き込み(add)
-    - Listをforでまわすとき(forループ) 
-https://qiita.com/leebon93/items/c7f2ac357f36930ff77f
-- シングルスレッドでもConcurrentModificationExceptionが発生する場合がある
-forで回している内部でremoveする
-https://qiita.com/ukitiyan/items/adec43ea77cb78169e80
-https://qiita.com/ReijiHata/items/f1c1c580f0725b576f59
