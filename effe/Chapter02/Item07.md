@@ -138,9 +138,25 @@ public Object pop() {
 - 原因1: 参照をキャッシュに入れたままにしてしまう
     - 解決方法
         - キャッシュを`WeakHashMap`で表現する（キャッシュのエントリに対するキーへの参照がキャッシュの外にある場合）
-        - `WeakHashMap`ではエントリが無効になるとガベージコレクトの対象外にすることができなくなって破棄される。よってメモリリークを防ぐことができる[WeakHashMapのJavadoc](https://docs.oracle.com/javase/jp/8/docs/api/java/util/WeakHashMap.html)
-        - 一般的にはキャッシュエントリは時間経過に伴って意味をなさなくなるので適宜除去されるべき。これは[ScheduledThreadPoolExecutor](https://docs.oracle.com/javase/jp/8/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html)で実現するか、キャッシュにエントリを追加するときに副作用として実行することもできる。後者の具体例は、[LinkedHashMapクラスのremoveEldestEntryメソッド](https://docs.oracle.com/javase/jp/8/docs/api/java/util/LinkedHashMap.html#removeEldestEntry-java.util.Map.Entry-)
-        - 高度な(?)キャッシュ[java.lang.ref](https://docs.oracle.com/javase/jp/8/docs/api/java/lang/ref/package-summary.html])を直接使う場合もある
+            - エントリは1組のkeyとvalueのことを指す(キャッシュがMapで表現されているので)
+            - `WeakHashMap`が初見だったので[Javadoc](https://docs.oracle.com/javase/jp/8/docs/api/java/util/WeakHashMap.html)と[こちらの記事](https://qiita.com/Apacher-inf/items/fbcc00316a4085e45413)でキャッチアップ
+            - `WeakHashMap`はキーが弱参照となっている。弱参照の使い所はマルチスレッドでインスタンスを再利用したいとき。参考記事は[こちら](https://qiita.com/ReijiHata/items/f1c1c580f0725b576f59)
+                - （補足）参考記事の中で`syschronized`がわからなかったので、スッキリわかるJava入門実践編19.3.1,19.3.2と[悲観ロック・楽観ロックの記事](https://qiita.com/NagaokaKenichi/items/73040df85b7bd4e9ecfc)を参照
+                -  (さらに補足)シングルスレッドでも`ConcurrentModificationException`が発生するケースを[コチラの記事](https://qiita.com/ukitiyan/items/adec43ea77cb78169e80)で考察
+        - `WeakHashMap`ではエントリが無効になるとガベージコレクトの対象外になって破棄される。よってメモリリークを防ぐことができる
+            -  上記の流れ
+                1. キャッシュの外からの参照が切れる
+                2. キャッシュエントリのキーが強参照でなくなる（弱参照になる）
+                3. ガベージコレクションの対象となる
+                4. キャッシュエントリのキーが消える
+                5. キャッシュエントリのキーを持たない値も消える
+                6. すなわちキャッシュエントリが消える
+        - 一般的にはキャッシュエントリは時間経過に伴って意味をなさなくなるので適宜除去されるべき。これは[ScheduledThreadPoolExecutor](https://docs.oracle.com/javase/jp/8/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html)で実現するか、キャッシュにエントリを追加するときに副作用として実行することもできる。
+            - 前者の`ScheduledThreadPoolExecutor`の概要は[こちらの記事](https://qiita.com/amay077/items/b5f4e98b50d7fbcbaaec)を参照
+                - 定期的にweakHashMapのキーをクリアしたり、ガベージコレクションを動作させる処理 を定期的にプログラムに実行してもらうイメージ
+            - 後者の具体例は、[LinkedHashMapクラスのremoveEldestEntryメソッド](https://docs.oracle.com/javase/jp/8/docs/api/java/util/LinkedHashMap.html#removeEldestEntry-java.util.Map.Entry-)
+                - キューのイメージで新しいキャッシュエントリが追加されたら古いキャッシュエントリが玉突きで削除されるイメージ
+        - 自分でカスタマイズして、より高度な(というよりオーダーメイドに応えた？原著は`sophisticated`と書いてて`LinkedHashMap`の作者であるJoshua Blochの若干のドヤを感じる笑)キャッシュ[java.lang.ref](https://docs.oracle.com/javase/jp/8/docs/api/java/lang/ref/package-summary.html])を直接使う場合もある
 
 
 - 原因2:リスナーやコールバック
@@ -186,3 +202,14 @@ public Object pop() {
     - データ構造の話(メモリ上でどう実現されるか)
         - 抽象データ型＋データ構造で作られている型がある
         - 例：ArrayList、HashSet
+- 楽観ロック、悲観ロック（）
+https://qiita.com/NagaokaKenichi/items/73040df85b7bd4e9ecfc
+- しくろないずど
+- マルチスレッド
+    - 資源への書き込み(add)
+    - Listをforでまわすとき(forループ) 
+https://qiita.com/leebon93/items/c7f2ac357f36930ff77f
+- シングルスレッドでもConcurrentModificationExceptionが発生する場合がある
+forで回している内部でremoveする
+https://qiita.com/ukitiyan/items/adec43ea77cb78169e80
+https://qiita.com/ReijiHata/items/f1c1c580f0725b576f59
