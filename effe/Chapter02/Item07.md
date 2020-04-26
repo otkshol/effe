@@ -157,6 +157,7 @@ public Object pop() {
             - 後者の具体例は、[LinkedHashMapクラスのremoveEldestEntryメソッド](https://docs.oracle.com/javase/jp/8/docs/api/java/util/LinkedHashMap.html#removeEldestEntry-java.util.Map.Entry-)
                 - キューのイメージで新しいキャッシュエントリが追加されたら古いキャッシュエントリが玉突きで削除されるイメージ
         - 自分でカスタマイズして、より高度な(というよりオーダーメイドに応えた？原著は`sophisticated`と書いてて`LinkedHashMap`の作者であるJoshua Blochの若干のドヤを感じる笑)キャッシュ[java.lang.ref](https://docs.oracle.com/javase/jp/8/docs/api/java/lang/ref/package-summary.html])を直接使う場合もある
+            - `WeakHashMap`の実装を見ると`java.lang.ref.WeakReference`を継承してるので、無意識に使っているはず。
 
 
 - 原因2:リスナーやコールバック
