@@ -95,7 +95,13 @@ static void copy(String src, String dst) throws IOExpecton {
 - tryブロックと（省略されている）finallyブロックの両方で、例外が発生するとtryブロックの例外がスローされる
     - `Throwable`の`getSuppressed`メソッドを使えば隠蔽されている例外にアクセス可能
 
-```
-// catch節を持つtry-with-resource
 
-```
+## まとめ
+**`try-with-resource`の方が圧倒的に便利なので使いましょう！**
+### メリット
+- finallyブロックの記述が必要なくなり可読性がよくなる
+- 最初に発生した例外を投げるのでメンテナンスがしやすい
+- close漏れがなくなる
+
+
+
