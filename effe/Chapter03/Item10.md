@@ -39,3 +39,17 @@ Objectクラスのequalsメソッドは参照値比較で等価判定を行う�
     - nullでない任意の参照値*x*に対して、`x.equals(null)`は`false`を返す
 
  ---   
+
+## 反射律 (*reflexive*)
+
+
+## 対象律 (*symmetric*)
+    
+
+    
+## 推移律 (*transitive*)
+    
+## 整合律 (*consistent*)
+   
+## null性
+    
