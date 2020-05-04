@@ -46,10 +46,15 @@ Objectクラスのequalsメソッドは参照値比較で等価判定を行う�
 ## 対象律 (*symmetric*)
     
 
-    
+
 ## 推移律 (*transitive*)
+
+
+http://www.itsenka.com/contents/development/java/class2.html
     
 ## 整合律 (*consistent*)
    
 ## null性
     
+
+    NumberUtil
