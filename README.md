@@ -19,7 +19,7 @@ Effective Javaの輪読を軸に、不明点や理解不足の基本事項を参
 - 項目8  2020/04/26 (1パラグラフ目とまとめのみ読んでスキップ)
 - 項目9  2020/04/28
 - 項目10 2020/04/29 ~ 2020/05/04 (2020/05/02休み)
-- 項目11 2020/05/06
+- 項目11 2020/05/07 ~
 
 ---
 ## 参考書籍
@@ -39,9 +39,19 @@ Effective Javaの輪読を軸に、不明点や理解不足の基本事項を参
 ![みんなのコンピュータサイエンス](https://images-na.ssl-images-amazon.com/images/I/41QFHYrBcsL._SX350_BO1,204,203,200_.jpg "みんなのコンピュータサイエンス")
 
 ---
-### お世話になっているサイト
+## お世話になっているサイト
 -  [Java(tm) Platform, Standard Edition 8
 API仕様](https://docs.oracle.com/javase/jp/8/docs/api/overview-summary.html)
 -  [Java(tm) Platform, Standard Edition 8
 API仕様(英語版)](https://docs.oracle.com/javase/8/docs/api/overview-summary.html)
 -  [「分かりそう」で「分からない」でも「分かった」気になれるIT用語辞典](https://wa3.i-3-i.info/index.html)
+
+---
+## 補習
+
+###  [改訂第3版 すらすらと手が動くようになる SQL書き方ドリル](https://www.amazon.co.jp/gp/product/4774180661/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)
+![改訂第3版 すらすらと手が動くようになる SQL書き方ドリル](https://images-na.ssl-images-amazon.com/images/I/61tsxdCdOsL._SX352_BO1,204,203,200_.jpg "改訂第3版 すらすらと手が動くようになる SQL書き方ドリル")
+
+
+###  [反復学習ソフト付き 正規表現書き方ドリル](https://www.amazon.co.jp/gp/product/4774145092/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1)
+![反復学習ソフト付き 正規表現書き方ドリル](https://images-na.ssl-images-amazon.com/images/I/51+QEm3ScHL._SX298_BO1,204,203,200_.jpg "反復学習ソフト付き 正規表現書き方ドリル")
