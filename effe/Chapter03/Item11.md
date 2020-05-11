@@ -3,12 +3,15 @@
 **equalsをオーバーライドしているすべてのクラスで、hashCodeをオーバーライドする必要がある。**　オーバーライドを忘れると、`HashMap`や`HashSet`で論理的等価なオブジェクトに対して`equals`が作用しないバグが発生する。
 
 ---
-## hashCodeの一般契約
+## hashCodeの２つの一般契約と１つの努力目標
 ### **hashCodeの整合律**
 論理的等価である2つのオブジェクト対して、それぞれ`hashCode`メソッドを実行すると同じ結果が返り、アプリケーションの再起動がかかるまでは何回実行しても結果は変わらない。
 
 ### **hashCodeの包含律**
-`hashCode`の一致は`equals`を包含している。ただし`hashCode`と`equals`の領域は一致している必要はない。（`hashCode`と`equals`の領域が一致している状態が理想）
+`hashCode`の一致は`equals`を包含している。ただし`hashCode`と`equals`の領域は一致している必要はない。
+
+### **hashCodeの閉包律** (努力目標)
+`hashCode`と`equals`の領域が一致している状態が理想（必須条件ではない）
 
 ---
 
@@ -76,17 +79,14 @@ m.get(new PhoneNumber(707, 867, 5309), "Jenny");
 - 0でない正の整数をかける理由
 同一ハッシュ値を満たすフィールドのハッシュコード値の組み合わせを減らして、限りなく１つに近づけてequalsメソッドと同じ領域にしたい。
 
-- 31の理由が分からない（奇数かつ素数だかららしい...）
+- 31の理由は奇数かつ素数
     - 奇数の理由
-        - 偶数かつオーバーフローしたときに、２をかけることはシフトすることになる（？？？）
-            - たぶん議論になる。（）
-        - [参考記事](https://www.thekingsmuseum.info/entry/2015/08/28/000748)
-        - [参考記事２](https://computinglife.wordpress.com/2008/11/20/why-do-hash-functions-use-prime-numbers/)
+        - 偶数かつオーバーフローしたときに、２をかけることはシフトして情報が失われる。（下の桁が０になることを言っている）
     - 素数
         - メリットは明確でないが伝統的に使用されている
         - 31のメリットは乗算がシフトと減算で置き換えられること
         ```
-        // どれがシフトでどれが演算？？
+        // i = 0 とi = 1で成り立つ
         31 * i == (i << 5 ) - i
         ```
 ---
@@ -94,10 +94,14 @@ m.get(new PhoneNumber(707, 867, 5309), "Jenny");
 上記の例で妥当なハッシュ関数であり、Javaでは同等のものが使用されているが、もっと衝突を抑えようとおもったら
 [Guavaのやつを参照する。](https://github.com/google/guava/blob/master/guava/src/com/google/common/hash/Hashing.java)
 
+[Guavaはgoogleが開発したJavaライブラリで結構使用されている](https://weblabo.oscasierra.net/google-guava-2/)
+
 ---
 #### Objectクラスのhash()の性能
 
-`Object.hash`は引数が基本データ型ならオートボクシングが走ってコストがかかる。（）
+`Object.hash`は下記２つのコストから仕様すべきではない。
+- 配列を生成する
+- 基本データ型の引数をObject型にキャストする
 
 ---
 #### クラスが不変で計算のコストが高い場合
@@ -120,6 +124,25 @@ private int hashCode(); // 自動的に0に初期化される
 }
 ```
 
+```
+// リファクタ案 (できるだけネストを避けている)
+@Override public int hashcode() {
+    if (hashCode != 0)
+        return hashCode;
+
+    int result = Short.hashCode(areaCode);
+    result = 31 * result + Short.hashCode(prefix);
+    result = 31 * result + Short.hashCode(lineNum);
+    hashCode = result;
+    return result;
+}
+
+
+```
+
+#### hashCodeの初期値は0でない理由
+    - 遅延初期化時による0なのか、計算結果が0なのか判別がつかずハッシュコードを計算してもキャッシュされないケースが発生しうるから。
+
 ---
 #### その他注意点
 - パフォーマンス向上を狙って、ハッシュコードの計算から意味のあるオブジェクトの
@@ -134,13 +157,6 @@ private int hashCode(); // 自動的に0に初期化される
 - equalをオーバーライドするときはhashCodeもオーバーライドする必要がある。
 - オーバーライドするときにはレシピにしたがう必要がある。
 - AutoValueフレームワーク使うのが最も便利。IDEでも自動生成できる。
-
----
-#### 未解決の疑問
-- hashCodeの初期値は0?そうでない？
-    - Effective Java とスッキリJavaで主張が違う
-
-- 正規形のhashCodeを返すメリットが分からない
 
 ---
 
