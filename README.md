@@ -44,4 +44,4 @@ Effective Javaの輪読を軸に、不明点や理解不足の基本事項を参
 API仕様](https://docs.oracle.com/javase/jp/8/docs/api/overview-summary.html)
 -  [Java(tm) Platform, Standard Edition 8
 API仕様(英語版)](https://docs.oracle.com/javase/8/docs/api/overview-summary.html)
--  [「分かりそう」で「分からない」でも「分かった」気になれるIT用語辞典](https://wa3.i-3-i.info/index.html)
+-  [「分かりそう」で「分からない」でも「分かった」気になれるIT用語辞典](https://wa3.i-3-i.info/index.html
