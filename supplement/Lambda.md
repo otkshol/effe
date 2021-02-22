@@ -73,5 +73,6 @@
 リファレンスは[こちら](https://docs.oracle.com/javase/jp/8/docs/api/java/util/stream/Stream.html)
 
 ### 並列処理による効率化
-`parallelStream()`を使用することで並列処理を可能にして性能改善に大きく貢献できる。
+`paralleStream()`を使用することで並列処理を可能にして性能改善に大きく貢献できる。
+-  バッチ処理の並列化で使用されている
 
