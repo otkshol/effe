@@ -20,7 +20,7 @@ Effective Javaの輪読を軸に、不明点や理解不足の基本事項を参
 - 項目9  2020/04/28
 - 項目10 2020/04/29 ~ 2020/05/04 (2020/05/02休み)
 - 項目11 2020/05/07 ~ 2020/05/13
-- 項目12 2020/05/14 ~ 2020/05/16
+
 
 （輪読会休止中）
 
@@ -42,12 +42,17 @@ Effective Javaの輪読を軸に、不明点や理解不足の基本事項を参
 ![スッキリわかるJava入門 第2版](https://images-na.ssl-images-amazon.com/images/I/51p6dqvB3lL._SX351_BO1,204,203,200_.jpg "スッキリわかるJava入門")
 
 ---
+
+### お世話になっているサイト
+=======
 ## 参考サイト
+
 -  [Java(tm) Platform, Standard Edition 8
 API仕様](https://docs.oracle.com/javase/jp/8/docs/api/overview-summary.html)
 -  [Java(tm) Platform, Standard Edition 8
 API仕様(英語版)](https://docs.oracle.com/javase/8/docs/api/overview-summary.html)
 -  [「分かりそう」で「分からない」でも「分かった」気になれるIT用語辞典](https://wa3.i-3-i.info/index.html)
+=======
 
 ---
 ## 副教材
